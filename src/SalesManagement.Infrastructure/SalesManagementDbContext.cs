@@ -15,12 +15,6 @@ public class SalesManagementDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<Customer>(x =>
-        {
-            x.ComplexProperty(y => y.DeliveryAddress, z => z.IsRequired());
-            x.ComplexProperty(y => y.Email);
-        });
-
+        modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
     }
 }

@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SalesManagement.Domain.Customers.ValueObjects;
 
+
 public class DeliveryAddress
 {
     [Column(TypeName = "varchar(255)")]
