@@ -4,7 +4,7 @@ using SalesManagement.Application.Customers.CreateCustomer;
 
 namespace SalesManagement.Api.Controllers;
 
-[Microsoft.AspNetCore.Components.Route("api/customers")]
+[Route("api/customers")]
 public class CustomerController : ApiBaseController
 {
     private readonly ICreateCustomerUseCase _createCustomerUseCase;

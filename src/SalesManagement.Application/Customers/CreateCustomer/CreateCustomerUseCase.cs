@@ -1,10 +1,12 @@
 using System.Net;
 using AutoMapper;
+using SalesManagement.Application.Commons.Attributes;
 using SalesManagement.Application.Commons.Results;
 using SalesManagement.Domain.Customers;
 
 namespace SalesManagement.Application.Customers.CreateCustomer;
 
+[UseCase]
 public class CreateCustomerUseCase : ICreateCustomerUseCase
 {
     private readonly ICustomerRepository _customerRepository;
