@@ -18,10 +18,12 @@ public class GetCustomerListUseCase : IGetCustomerListUseCase
         _mapper = mapper;
     }
 
-    public async Task<PagingListResult<Customer>> GetCustomerListAsync(BaseApiListRequest request)
+    public async Task<PagingListResult<CustomerListResponse>> GetCustomerListAsync(BaseApiListRequest request)
     {
         var listResult = await _customerRepository.GetCustomersAsync(request.FilterExpression, request.PageSize, request.Page);
 
-        return new PagingListResult<Customer>(listResult.Total, listResult.Items);
+        var responseCustomers = _mapper.Map<List<CustomerListResponse>>(listResult.Items);
+
+        return new PagingListResult<CustomerListResponse>(listResult.Total, responseCustomers);
     }
 }

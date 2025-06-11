@@ -6,5 +6,5 @@ namespace SalesManagement.Application.Customers.GetCustomerList;
 
 public interface IGetCustomerListUseCase
 {
-    Task<PagingListResult<Customer>> GetCustomerListAsync(BaseApiListRequest request);
+    Task<PagingListResult<CustomerListResponse>> GetCustomerListAsync(BaseApiListRequest request);
 }

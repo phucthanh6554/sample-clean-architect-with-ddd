@@ -1,5 +1,6 @@
 using AutoMapper;
 using SalesManagement.Application.Customers.CreateCustomer;
+using SalesManagement.Application.Customers.GetCustomerList;
 using SalesManagement.Domain.Customers;
 using SalesManagement.Domain.Customers.ValueObjects;
 
@@ -10,15 +11,12 @@ public class CustomerMappingProfile : Profile
     public CustomerMappingProfile()
     {
         CreateMap<CreateCustomerCommand, CustomerCreationModel>();
-        
-        // CreateMap<CreateCustomerCommand, Customer>()
-        //     .ForMember(x => x.Email, opt => opt.MapFrom(src => new EmailAddress { Value = src.Email }))
-        //     .ForMember(x => x.DeliveryAddress, opt => opt.MapFrom(src => new DeliveryAddress
-        //     {
-        //         Address = src.Address,
-        //         City = src.City,
-        //         Country = src.Country,
-        //     }));
+
+        CreateMap<Customer, CustomerListResponse>()
+            .ForMember(x => x.Email, opt => opt.MapFrom(src => src.Email.Value))
+            .ForMember(x => x.Address, opt => opt.MapFrom(src => src.DeliveryAddress.Address))
+            .ForMember(x => x.City, opt => opt.MapFrom(src => src.DeliveryAddress.City))
+            .ForMember(x => x.Country, opt => opt.MapFrom(src => src.DeliveryAddress.Country));
 
     }
 }
