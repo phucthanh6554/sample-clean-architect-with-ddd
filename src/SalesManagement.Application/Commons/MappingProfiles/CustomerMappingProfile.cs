@@ -9,14 +9,16 @@ public class CustomerMappingProfile : Profile
 {
     public CustomerMappingProfile()
     {
-        CreateMap<CreateCustomerCommand, Customer>()
-            .ForMember(x => x.Email, opt => opt.MapFrom(src => new EmailAddress { Value = src.Email }))
-            .ForMember(x => x.DeliveryAddress, opt => opt.MapFrom(src => new DeliveryAddress
-            {
-                Address = src.Address,
-                City = src.City,
-                Country = src.Country,
-            }));
+        CreateMap<CreateCustomerCommand, CustomerCreationModel>();
+        
+        // CreateMap<CreateCustomerCommand, Customer>()
+        //     .ForMember(x => x.Email, opt => opt.MapFrom(src => new EmailAddress { Value = src.Email }))
+        //     .ForMember(x => x.DeliveryAddress, opt => opt.MapFrom(src => new DeliveryAddress
+        //     {
+        //         Address = src.Address,
+        //         City = src.City,
+        //         Country = src.Country,
+        //     }));
 
     }
 }

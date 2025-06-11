@@ -18,7 +18,8 @@ builder.Services.AddAutoMapper(config =>
 
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson();
 
 builder.Services.AddDbContext<SalesManagementDbContext>(config =>
 {

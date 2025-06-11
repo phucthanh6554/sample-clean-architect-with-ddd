@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SalesManagement.Domain.Commons;
 using SalesManagement.Domain.Customers.ValueObjects;
 
 namespace SalesManagement.Domain.Customers;
@@ -26,20 +27,35 @@ public class Customer
     
     public DeliveryAddress DeliveryAddress { get; init; } = new DeliveryAddress();
 
-    public bool IsValid()
+    public static CreateEntityResult<Customer> Create(CustomerCreationModel creationModel)
     {
-        if(string.IsNullOrWhiteSpace(FirstName))
-            return false;
+        var customer = new Customer
+        {
+            FirstName = creationModel.FirstName,
+            LastName = creationModel.LastName,
+            DateOfBirth = creationModel.DateOfBirth,
+            PhoneNumber = creationModel.PhoneNumber,
+            Email = new EmailAddress { Value = creationModel.Email },
+            DeliveryAddress = new DeliveryAddress
+            {
+                City = creationModel.City,
+                Country = creationModel.Country,
+                Address = creationModel.Address
+            }
+        };
         
-        if(string.IsNullOrWhiteSpace(LastName))
-            return false;
+        if(string.IsNullOrEmpty(customer.FirstName))
+            return new CreateEntityResult<Customer>("First name cannot be empty");
         
-        if(!Email.IsValid())
-            return false;
+        if(string.IsNullOrEmpty(customer.LastName))
+            return new CreateEntityResult<Customer>("Last name cannot be empty");
         
-        if(!this.DeliveryAddress.IsValid())
-            return false;
+        if(!customer.Email.IsValid())
+            return new CreateEntityResult<Customer>("Invalid email address");
         
-        return true;
+        if(!customer.DeliveryAddress.IsValid())
+            return new CreateEntityResult<Customer>("Invalid delivery address");
+        
+        return new CreateEntityResult<Customer>(customer);
     }
 }

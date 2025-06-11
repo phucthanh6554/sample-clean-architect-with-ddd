@@ -20,12 +20,14 @@ public class CreateCustomerUseCase : ICreateCustomerUseCase
 
     public async Task<GeneralResult<Customer>> CreateCustomerAsync(CreateCustomerCommand command)
     {
-        var modelCustomer = _mapper.Map<Customer>(command);
+        var customerCreationModel = _mapper.Map<CustomerCreationModel>(command);
         
-        if(!modelCustomer.IsValid())
-            return new GeneralResult<Customer>(HttpStatusCode.BadRequest, "Customer info is invalid");
+        var customerCreateResult = Customer.Create(customerCreationModel);
         
-        var createdCustomer = await _customerRepository.CreateCustomerAsync(modelCustomer);
+        if(!customerCreateResult.IsSuccess || customerCreateResult.Entity == null)
+            return new GeneralResult<Customer>(HttpStatusCode.BadRequest, customerCreateResult.ErrorMessage);
+        
+        var createdCustomer = await _customerRepository.CreateCustomerAsync(customerCreateResult.Entity);
         
         if(createdCustomer == null)
             return new GeneralResult<Customer>(HttpStatusCode.InternalServerError, "Customer could not be created");

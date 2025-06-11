@@ -9,7 +9,7 @@ public class ApiBaseController : ControllerBase
     protected IActionResult ReturnResponse<T>(GeneralResult<T> result)
     {
         if(result.StatusCode == HttpStatusCode.OK)
-            return Ok(result);
+            return Ok(result.ReturnObject);
         
         if(result.StatusCode == HttpStatusCode.NotFound)
             return NotFound(result.ReturnObject);
