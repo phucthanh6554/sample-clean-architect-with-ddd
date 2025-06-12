@@ -113,4 +113,15 @@ public class Order
         
         return new CreateEntityResult<OrderItem>(orderItem);
     }
+
+    public bool RemoveOrderItem(int orderItemId)
+    {
+        var item = OrderItems.FirstOrDefault(x => x.Id == orderItemId);
+        
+        if(item == null)
+            return false;
+        
+        OrderItems.Remove(item);
+        return true;
+    }
 }

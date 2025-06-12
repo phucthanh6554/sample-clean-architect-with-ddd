@@ -104,6 +104,62 @@ public class OrderRepositoryTest
         Assert.True(result.OrderItems.Count > oldOrderItemCount);
         Assert.All(result.OrderItems, item => Assert.True(item.Id > 0));
     }
+    
+    [Fact]
+    public async Task UpdateOrderItem_ValidModel_Successfully()
+    {
+        var context = GetDbContext();
+        
+        var order = await context.Orders
+            .Include(x => x.OrderItems)
+            .FirstAsync(o => o.Id == 1);
+
+        var addOrderItemModel = new OrderItemAddEditModel
+        {
+            ProductName = "A Sample Product",
+            Quantity = 5,
+            Price = 999,
+            Currency = "USD"
+        };
+
+        order.UpdateOrderItem(order.OrderItems.First().Id, addOrderItemModel);
+        
+        var repository = new OrderRepository(context);
+
+        var result = await repository.UpdateOrderAsync(order);
+        
+        Assert.NotNull(result);
+        Assert.Equal(result.OrderItems.First().ProductName, addOrderItemModel.ProductName);
+    }
+    
+    [Fact]
+    public async Task RemoveOrderItem_ValidModel_Successfully()
+    {
+        var context = GetDbContext();
+
+        var orderId = 2;
+        
+        var order = await context.Orders
+            .Include(x => x.OrderItems)
+            .FirstAsync(o => o.Id == orderId);
+
+        var removeItemId = order.OrderItems.First().Id;
+        
+        order.RemoveOrderItem(removeItemId);
+        
+        var repository = new OrderRepository(context);
+
+        await repository.UpdateOrderAsync(order);
+        
+        var orderAfterUpdate = await context.Orders
+            .Include(x => x.OrderItems)
+            .FirstAsync(o => o.Id == orderId);
+        
+        var isItemDeleted = orderAfterUpdate.OrderItems.Any(x => x.Id == removeItemId) == false;
+        
+        Assert.NotNull(orderAfterUpdate);
+        Assert.True(isItemDeleted);
+    }
 
     private SalesManagementDbContext GetDbContext()
     {
