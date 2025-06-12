@@ -1,6 +1,7 @@
 using AutoMapper;
 using SalesManagement.Application.Customers.CreateCustomer;
 using SalesManagement.Application.Customers.GetCustomerList;
+using SalesManagement.Application.Customers.UpdateCustomer;
 using SalesManagement.Domain.Customers;
 using SalesManagement.Domain.Customers.ValueObjects;
 
@@ -17,6 +18,8 @@ public class CustomerMappingProfile : Profile
             .ForMember(x => x.Address, opt => opt.MapFrom(src => src.DeliveryAddress.Address))
             .ForMember(x => x.City, opt => opt.MapFrom(src => src.DeliveryAddress.City))
             .ForMember(x => x.Country, opt => opt.MapFrom(src => src.DeliveryAddress.Country));
+
+        CreateMap<UpdateCustomerCommand, CustomerUpdateModel>();
 
     }
 }

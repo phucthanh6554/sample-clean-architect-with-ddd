@@ -59,20 +59,7 @@ public class CustomerRepository : ICustomerRepository
 
     public async Task<Customer?> UpdateCustomerAsync(Customer updateCustomerModel)
     {
-        if(updateCustomerModel.Id == 0)
-            return null;
-        
-        var existedCustomer = await _context.Customers.FindAsync(updateCustomerModel.Id);
-        
-        if (existedCustomer == null)
-            return null;
-        
-        existedCustomer.Email.Value = updateCustomerModel.Email.Value;
-        existedCustomer.DeliveryAddress.Address = updateCustomerModel.DeliveryAddress.Address;
-        existedCustomer.DeliveryAddress.City = updateCustomerModel.DeliveryAddress.City;
-        existedCustomer.DeliveryAddress.Country = updateCustomerModel.DeliveryAddress.Country;
-        
-        _context.Customers.Update(existedCustomer);
+        _context.Customers.Update(updateCustomerModel);
         await _context.SaveChangesAsync();
         return updateCustomerModel;
     }

@@ -27,6 +27,22 @@ public class Customer
     
     public DeliveryAddress DeliveryAddress { get; init; } = new DeliveryAddress();
 
+    public static CreateEntityResult<Customer> Update(Customer customer, CustomerUpdateModel updateModel)
+    {
+        customer.Email.Value = updateModel.Email;
+        customer.DeliveryAddress.Address = updateModel.Address;
+        customer.DeliveryAddress.City = updateModel.City;
+        customer.DeliveryAddress.Country = updateModel.Country;
+
+        if (!customer.Email.IsValid())
+            return new CreateEntityResult<Customer>("Invalid email address");
+        
+        if(!customer.DeliveryAddress.IsValid())
+            return new CreateEntityResult<Customer>("Invalid delivery address");
+        
+        return new CreateEntityResult<Customer>(customer);
+    }
+
     public static CreateEntityResult<Customer> Create(CustomerCreationModel creationModel)
     {
         var customer = new Customer

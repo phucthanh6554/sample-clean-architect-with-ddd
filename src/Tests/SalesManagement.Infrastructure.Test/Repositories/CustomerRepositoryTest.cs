@@ -293,47 +293,24 @@ public class CustomerRepositoryTest
         using var context = GetDbContext();
         
         var repository = new CustomerRepository(context);
-
-        var validRequest = new Customer
-        {
-            Id = 9,
-            FirstName = "James Edited",
-            LastName = "Anderson Edited",
-            Email = new EmailAddress { Value = "james_edited@example.com" },
-            PhoneNumber = "666-777-8888",
-            DateOfBirth = new DateTime(1973, 10, 19),
-            DeliveryAddress = new DeliveryAddress { Address = "606 Spruce Ave", City = "Dallas", Country = "USA" }
-        };
         
-        var updatedCustomer = await repository.UpdateCustomerAsync(validRequest);
+        var customer = await context.Customers.FirstOrDefaultAsync(x => x.Id == 9);
+        
+        if (customer == null)
+            throw new NullReferenceException();
+        
+        customer.Email.Value = "updated_email@test.com";
+        customer.DeliveryAddress.Address = "Updated Address";
+        customer.DeliveryAddress.City = "Updated City";
+        customer.DeliveryAddress.Country = "Updated Country";
+        
+        var updatedCustomer = await repository.UpdateCustomerAsync(customer);
         
         Assert.NotNull(updatedCustomer);
-        Assert.Equal("James Edited", updatedCustomer.FirstName);
-        Assert.Equal("Anderson Edited", updatedCustomer.LastName);
-        Assert.Equal("james_edited@example.com", updatedCustomer.Email.Value);
-    }
-    
-    [Fact]
-    public async Task UpdateCustomer_NotExistsCustomer_ReturnNull()
-    {
-        using var context = GetDbContext();
-        
-        var repository = new CustomerRepository(context);
-
-        var validRequest = new Customer
-        {
-            Id = 999,
-            FirstName = "James Edited",
-            LastName = "Anderson Edited",
-            Email = new EmailAddress { Value = "james_edited@example.com" },
-            PhoneNumber = "666-777-8888",
-            DateOfBirth = new DateTime(1973, 10, 19),
-            DeliveryAddress = new DeliveryAddress { Address = "606 Spruce Ave", City = "Dallas", Country = "USA" }
-        };
-        
-        var updatedCustomer = await repository.UpdateCustomerAsync(validRequest);
-        
-        Assert.Null(updatedCustomer);
+        Assert.Equal(customer.Email.Value, updatedCustomer.Email.Value);
+        Assert.Equal(customer.DeliveryAddress.Address, updatedCustomer.DeliveryAddress.Address);
+        Assert.Equal(customer.DeliveryAddress.City, updatedCustomer.DeliveryAddress.City);
+        Assert.Equal(customer.DeliveryAddress.Country, updatedCustomer.DeliveryAddress.Country);
     }
 
     [Fact]
