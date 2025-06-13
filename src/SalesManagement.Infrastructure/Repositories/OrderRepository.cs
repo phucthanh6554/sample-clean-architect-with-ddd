@@ -31,7 +31,12 @@ public class OrderRepository : IOrderRepository
         
         var count = await query.CountAsync();
 
-        var orders = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        var orders = await query
+            .Include(x => x.OrderItems)
+            .Include(x => x.Customer)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
         
         return new PagedResult<Order>(count, orders);
     }

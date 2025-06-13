@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SalesManagement.Application.Commons.Attributes;
 using SalesManagement.Application.Commons.MappingProfiles;
 using SalesManagement.Domain.Customers;
+using SalesManagement.Domain.Orders;
 using SalesManagement.Infrastructure;
 using SalesManagement.Infrastructure.Repositories;
 
@@ -28,6 +29,7 @@ builder.Services.AddDbContext<SalesManagementDbContext>(config =>
 });
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services.Scan(scan =>
 {
