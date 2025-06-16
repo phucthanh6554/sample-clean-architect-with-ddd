@@ -19,6 +19,7 @@ public class OrderRepository : IOrderRepository
         var order = await _context.Orders
             .Where(x => x.Id == id)
             .Include(x => x.OrderItems)
+            .Include(x => x.Customer)
             .AsNoTracking()
             .FirstOrDefaultAsync();
         
